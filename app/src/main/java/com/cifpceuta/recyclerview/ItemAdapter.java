@@ -57,4 +57,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             tvTexto.setText(item);
         }
     }
+
+    public void setList_item(ArrayList<String> list_item) {
+        this.list_item = list_item;
+        notifyDataSetChanged();
+    }
 }

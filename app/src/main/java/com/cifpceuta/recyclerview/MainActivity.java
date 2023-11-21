@@ -13,12 +13,14 @@ import android.view.MenuItem;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ItemAdapter adapter;
     private ArrayList<String> list_items;
     private Toolbar toolbar;
+    private boolean ordAsc = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +71,43 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if(id == R.id.opcion1){
             //Ascendente
-
+            list_items.sort(new Comparator<String>() {
+                public int compare(String obj1, String obj2) {
+                    return obj1.compareTo(obj2);
+                }
+            });
+            adapter.setList_item(list_items);
+            ordAsc = true;
         }
         else if(id == R.id.opcion2){
             //Descendente
-
+            list_items.sort(new Comparator<String>() {
+                public int compare(String obj1, String obj2) {
+                    return (obj1.compareTo(obj2))*(-1);
+                }
+            });
+            adapter.setList_item(list_items);
+            ordAsc = false;
         }
         else if(id == R.id.opcion3){
             //Interactivo
-
+            if (ordAsc){
+                list_items.sort(new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        return (obj1.compareTo(obj2))*(-1);
+                    }
+                });
+                adapter.setList_item(list_items);
+                ordAsc = false;
+            }else {
+                list_items.sort(new Comparator<String>() {
+                    public int compare(String obj1, String obj2) {
+                        return obj1.compareTo(obj2);
+                    }
+                });
+                adapter.setList_item(list_items);
+                ordAsc = true;
+            }
         }
 
         return true;
