@@ -2,6 +2,7 @@ package com.cifpceuta.recyclerview;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+//import com.google.android.material.search.SearchView;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> list_items;
     private Toolbar toolbar;
     private boolean ordAsc = true;
+    private boolean modoLista = true;
+    private SearchView barraBusqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,30 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+
+        barraBusqueda = findViewById(R.id.svBusqueda);
+
+        barraBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String texto){
+                filtrado(texto);
+                return false;
+            }
+        });
+    }
+    private void filtrado(String texto){
+        ArrayList<String> filteredList_items = new ArrayList<>();
+        for(String item : list_items){
+            if(item.toLowerCase().contains(texto.toLowerCase())){
+                filteredList_items.add(item);
+            }
+        }
+        adapter.setList_item(filteredList_items);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             });
             adapter.setList_item(list_items);
             ordAsc = true;
+
         }
         else if(id == R.id.opcion2){
             //Descendente
@@ -88,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             });
             adapter.setList_item(list_items);
             ordAsc = false;
+
         }
         else if(id == R.id.opcion3){
             //Interactivo
@@ -108,8 +139,25 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setList_item(list_items);
                 ordAsc = true;
             }
-        }
 
+        } else if (id == R.id.opcion4) {
+            if(modoLista){
+                recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+                modoLista = false;
+            }else {
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                modoLista = true;
+            }
+
+        } else if (id == R.id.opcionPar) {
+            adapter.setPar(2);
+
+        } else if (id == R.id.opcionImpar){
+            adapter.setPar(1);
+        } else if (id == R.id.opcionLimpiar) {
+            adapter.setPar(0);
+        }
         return true;
     }
+
 }

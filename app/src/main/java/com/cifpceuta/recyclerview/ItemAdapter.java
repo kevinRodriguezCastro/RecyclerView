@@ -1,5 +1,6 @@
 package com.cifpceuta.recyclerview;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +9,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
-    ArrayList<String> list_item;
+    private ArrayList<String> list_item;
+    private int par;
 
     public ItemAdapter(ArrayList<String> list_item) {
         this.list_item = list_item;
@@ -30,6 +33,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bindData(list_item.get(position));
+        holder.cardView.setCardBackgroundColor(Color.WHITE);
+            if (par == 2){
+                if (position%2 == 0){
+                    holder.cardView.setCardBackgroundColor(Color.GRAY);
+                }
+            }else if (par == 1){
+                if(position%2 != 0){
+                    holder.cardView.setCardBackgroundColor(Color.GREEN);
+                }
+            }
+
     }
 
     @Override
@@ -41,9 +55,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView tvTexto;
         Button btnBorrar;
         ItemAdapter adapter;
-
+        CardView cardView;
         public ViewHolder(@NonNull View itemView){
             super(itemView);
+            cardView = itemView.findViewById(R.id.cardView);
             tvTexto = itemView.findViewById(R.id.textoItem);
             btnBorrar = itemView.findViewById(R.id.btnItem);
             btnBorrar.setOnClickListener(view -> {
@@ -60,6 +75,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     public void setList_item(ArrayList<String> list_item) {
         this.list_item = list_item;
+        notifyDataSetChanged();
+    }
+
+    public void setPar(int par) {
+        if (par != this.par){
+            this.par = par;
+        }
+
+        notifyDataSetChanged();
+    }
+
+    public void limpiar(){
+        //this.par = false;
+
         notifyDataSetChanged();
     }
 }
